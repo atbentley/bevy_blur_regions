@@ -28,3 +28,8 @@ bevy = "0.13"
 name = "egui"
 path = "examples/egui.rs"
 required-features = ["egui"]
+
+[[example]]
+name = "settings"
+path = "examples/settings.rs"
+required-features = ["egui"]
