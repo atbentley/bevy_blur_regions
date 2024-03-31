@@ -1,6 +1,10 @@
-use bevy::{math::vec2, prelude::*, render::camera::NormalizedRenderTarget, window::PrimaryWindow};
+use bevy::math::vec2;
+use bevy::prelude::*;
+use bevy::render::camera::NormalizedRenderTarget;
+use bevy::window::PrimaryWindow;
 
-use crate::{BlurRegion, BlurRegionsCamera};
+use crate::BlurRegion;
+use crate::BlurRegionsCamera;
 
 pub fn compute_blur_regions<const N: usize>(
     primary_windows: Query<Entity, With<PrimaryWindow>>,
