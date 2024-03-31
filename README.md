@@ -1,5 +1,7 @@
 # Bevy Blur Regions
 
+[![crates.io](https://img.shields.io/crates/v/bevy_blur_regions)](https://crates.io/crates/bevy_blur_regions)
+
 A [Bevy](https://github.com/bevyengine/bevy) plugin to selectively blur regions of the screen.
 
 ![screenshot](content/screenshot.png)
