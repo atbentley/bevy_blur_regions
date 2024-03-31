@@ -1,5 +1,5 @@
-/// This example demonstrates how to use `BlurRegionsCamera::blur` as an immediate mode
-/// blurring api. This is useful when the built in Bevy UI support is not sufficient.
+// Demonstrates how to use the `BlurRegionsCamera::blur` immediate blurring api.
+//   cargo run --example immediate
 
 #[path = "./utils.rs"]
 mod utils;

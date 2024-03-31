@@ -1,4 +1,5 @@
-/// This example demonstrates that a scene without any blur regions functions correctly.
+// Demonstrates that a scene without any blur regions functions correctly.
+//   cargo run --example no_regions
 
 #[path = "./utils.rs"]
 mod utils;

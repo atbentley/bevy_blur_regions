@@ -9,13 +9,22 @@ license = "MIT OR Apache-2.0"
 
 [dependencies]
 bevy = { version = "0.13", default-features = false, features = ["bevy_render"] }
+bevy_egui = { version = "0.26", optional = true }
 
 [features]
-all = ["bevy_ui"]
+all = ["bevy_ui", "egui"]
 default = ["bevy_ui"]
 
 # Enable Bevy UI integration
 bevy_ui = ["bevy/bevy_ui"]
 
+# Enable egui integration
+egui = ["dep:bevy_egui"]
+
 [dev-dependencies]
 bevy = "0.13"
+
+[[example]]
+name = "egui"
+path = "examples/egui.rs"
+required-features = ["egui"]

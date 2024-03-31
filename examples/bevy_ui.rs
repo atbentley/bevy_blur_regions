@@ -1,3 +1,6 @@
+// Demonstrates how to use Bevy UI integration to blur nodes.
+//   cargo run --example bevy_ui
+
 use bevy::prelude::*;
 use bevy_blur_regions::prelude::*;
 
