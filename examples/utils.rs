@@ -1,6 +1,10 @@
 use bevy::prelude::*;
 
-pub fn spawn_example_scene(mut commands: Commands, mut meshes: ResMut<Assets<Mesh>>, mut materials: ResMut<Assets<StandardMaterial>>) {
+pub fn spawn_example_scene(
+    mut commands: Commands,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
+) {
     commands.spawn((PbrBundle {
         mesh: meshes.add(Rectangle::new(10.0, 10.0)),
         material: materials.add(Color::WHITE),

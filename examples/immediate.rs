@@ -39,6 +39,12 @@ fn update(windows: Query<&Window>, mut blur_region_cameras: Query<&mut DefaultBl
         window.resolution.physical_width() as f32,
         window.resolution.physical_height() as f32,
     );
-    blur_regions.blur(Rect::from_center_size(vec2(0.25, 0.5) * screen_size, vec2(0.3, 0.5) * screen_size));
-    blur_regions.blur(Rect::from_center_size(vec2(0.75, 0.5) * screen_size, vec2(0.3, 0.5) * screen_size));
+    blur_regions.blur(Rect::from_center_size(
+        vec2(0.25, 0.5) * screen_size,
+        vec2(0.3, 0.5) * screen_size,
+    ));
+    blur_regions.blur(Rect::from_center_size(
+        vec2(0.75, 0.5) * screen_size,
+        vec2(0.3, 0.5) * screen_size,
+    ));
 }

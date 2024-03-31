@@ -30,7 +30,10 @@ fn setup(mut commands: Commands) {
     ));
 }
 
-fn update(mut contexts: EguiContexts, mut blur_region_cameras: Query<&mut bevy_blur_regions::DefaultBlurRegionsCamera>) {
+fn update(
+    mut contexts: EguiContexts,
+    mut blur_region_cameras: Query<&mut bevy_blur_regions::DefaultBlurRegionsCamera>,
+) {
     let mut blur_regions = blur_region_cameras.single_mut();
 
     let frame = egui::Frame::window(&contexts.ctx_mut().style())
@@ -38,11 +41,21 @@ fn update(mut contexts: EguiContexts, mut blur_region_cameras: Query<&mut bevy_b
         .rounding(0.0)
         .shadow(egui::epaint::Shadow::NONE);
 
-    egui::Window::new("Blur").frame(frame).show_with_blur(egui::Id::new("Blur"), &mut blur_regions, contexts.ctx_mut(), |ui| {
-        ui.allocate_space(egui::vec2(300.0, 150.0));
-    });
+    egui::Window::new("Blur").frame(frame).show_with_blur(
+        egui::Id::new("Blur"),
+        &mut blur_regions,
+        contexts.ctx_mut(),
+        |ui| {
+            ui.allocate_space(egui::vec2(300.0, 150.0));
+        },
+    );
 
-    egui::Window::new("Blur2").frame(frame).show_with_blur(egui::Id::new("Blur2"), &mut blur_regions, contexts.ctx_mut(), |ui| {
-        ui.allocate_space(egui::vec2(300.0, 150.0));
-    });
+    egui::Window::new("Blur2").frame(frame).show_with_blur(
+        egui::Id::new("Blur2"),
+        &mut blur_regions,
+        contexts.ctx_mut(),
+        |ui| {
+            ui.allocate_space(egui::vec2(300.0, 150.0));
+        },
+    );
 }

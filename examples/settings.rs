@@ -30,7 +30,10 @@ fn setup(mut commands: Commands) {
     ));
 }
 
-fn update(mut contexts: EguiContexts, mut blur_region_cameras: Query<&mut bevy_blur_regions::DefaultBlurRegionsCamera>) {
+fn update(
+    mut contexts: EguiContexts,
+    mut blur_region_cameras: Query<&mut bevy_blur_regions::DefaultBlurRegionsCamera>,
+) {
     let mut blur_regions = blur_region_cameras.single_mut();
 
     let frame = egui::Frame::window(&contexts.ctx_mut().style())

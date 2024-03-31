@@ -34,7 +34,10 @@ pub fn compute_blur_regions<const N: usize>(
 
         for (node, transform) in &nodes {
             let translation = transform.translation();
-            let region = Rect::from_center_size(translation.xy() * window.scale_factor(), node.size() * window.scale_factor());
+            let region = Rect::from_center_size(
+                translation.xy() * window.scale_factor(),
+                node.size() * window.scale_factor(),
+            );
             blur_regions.blur(region);
         }
     }

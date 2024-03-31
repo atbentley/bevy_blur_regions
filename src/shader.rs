@@ -62,7 +62,10 @@ impl<const N: usize> Plugin for BlurRegionsShaderPlugin<N> {
 
         render_app
             .add_render_graph_node::<ViewNodeRunner<BlurRegionsNode<N>>>(Core3d, BlurRegionsLabel)
-            .add_render_graph_edges(Core3d, (Node3d::Tonemapping, BlurRegionsLabel, Node3d::EndMainPassPostProcessing));
+            .add_render_graph_edges(
+                Core3d,
+                (Node3d::Tonemapping, BlurRegionsLabel, Node3d::EndMainPassPostProcessing),
+            );
     }
 
     fn finish(&self, app: &mut App) {
@@ -106,7 +109,11 @@ impl<const N: usize> ViewNode for BlurRegionsNode<N> {
         let bind_group = render_context.render_device().create_bind_group(
             "blur_regions_bind_group",
             &blur_regions_pipeline.layout,
-            &BindGroupEntries::sequential((post_process.source, &blur_regions_pipeline.sampler, blur_regions_binding.clone())),
+            &BindGroupEntries::sequential((
+                post_process.source,
+                &blur_regions_pipeline.sampler,
+                blur_regions_binding.clone(),
+            )),
         );
 
         let mut render_pass = render_context.begin_tracked_render_pass(RenderPassDescriptor {
