@@ -6,6 +6,14 @@ use bevy::window::PrimaryWindow;
 use crate::BlurRegion;
 use crate::BlurRegionsCamera;
 
+pub struct BlurRegionsBevyUiPlugin<const N: usize>;
+
+impl<const N: usize> Plugin for BlurRegionsBevyUiPlugin<N> {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Last, crate::bevy_ui::compute_blur_regions::<N>);
+    }
+}
+
 pub fn compute_blur_regions<const N: usize>(
     primary_windows: Query<Entity, With<PrimaryWindow>>,
     windows: Query<&Window>,

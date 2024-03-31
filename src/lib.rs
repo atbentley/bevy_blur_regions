@@ -1,3 +1,4 @@
+#[cfg(feature = "bevy_ui")]
 mod bevy_ui;
 mod core;
 mod shader;

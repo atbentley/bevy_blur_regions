@@ -94,8 +94,9 @@ impl Default for BlurRegionsPlugin<DEFAULT_MAX_BLUR_REGIONS_COUNT> {
 
 impl<const N: usize> Plugin for BlurRegionsPlugin<N> {
     fn build(&self, app: &mut App) {
-        app.add_systems(PreUpdate, clear_blur_regions::<N>)
-            .add_systems(Last, crate::bevy_ui::compute_blur_regions::<N>)
-            .add_plugins(crate::shader::BlurRegionsShaderPlugin::<N>);
+        app.add_systems(PreUpdate, clear_blur_regions::<N>).add_plugins(crate::shader::BlurRegionsShaderPlugin::<N>);
+
+        #[cfg(feature = "bevy_ui")]
+        app.add_plugins(crate::bevy_ui::BlurRegionsBevyUiPlugin::<N>);
     }
 }
