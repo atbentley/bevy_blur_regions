@@ -1,8 +1,8 @@
-#[cfg(feature = "egui")]
-mod egui;
 #[cfg(feature = "bevy_ui")]
 mod bevy_ui;
 mod core;
+#[cfg(feature = "egui")]
+mod egui;
 mod shader;
 
 pub mod prelude {

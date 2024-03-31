@@ -20,12 +20,12 @@ struct ComputedBlurRegion {
     max_y: f32,
 }
 
-fn is_blurred(uv: vec2<f32>) -> bool {
+fn is_blurred(position: vec2<f32>) -> bool {
     for (var i = 0; u32(i) < blur_regions.current_regions_count; i++ ) {
-        if uv.x > blur_regions.regions[i].min_x
-            && uv.x < blur_regions.regions[i].max_x
-            && uv.y > blur_regions.regions[i].min_y
-            && uv.y < blur_regions.regions[i].max_y {
+        if position.x > blur_regions.regions[i].min_x
+            && position.x < blur_regions.regions[i].max_x
+            && position.y > blur_regions.regions[i].min_y
+            && position.y < blur_regions.regions[i].max_y {
             return true;
         }
     }
@@ -36,7 +36,10 @@ fn is_blurred(uv: vec2<f32>) -> bool {
 fn fragment(in: FullscreenVertexOutput) -> @location(0) vec4<f32> {
     var color = textureSample(screen_texture, texture_sampler, in.uv);
 
-    if !is_blurred(in.uv) {
+    let screen_size = vec2<f32>(textureDimensions(screen_texture).xy);
+    let position = in.uv * screen_size;
+
+    if !is_blurred(position) {
         return color;
     }
 
@@ -45,10 +48,7 @@ fn fragment(in: FullscreenVertexOutput) -> @location(0) vec4<f32> {
     let blur_contribution = 1.0 / f32(blur_regions.radial_steps * blur_regions.linear_steps + 1);
     color = color * blur_contribution;
 
-    let scaling = 0.5;
-    let screen_size = vec2<f32>(textureDimensions(screen_texture).xy);
-    let radius = vec2<f32>(blur_regions.radius * scaling, blur_regions.radius *  scaling * (screen_size.x / screen_size.y));
-
+    let radius = vec2<f32>(blur_regions.radius / screen_size.x, blur_regions.radius / screen_size.y);
     let radial_step_size = 2.0 * PI / f32(blur_regions.radial_steps);
     let linear_step_size = 1.0 / f32(blur_regions.linear_steps);
 

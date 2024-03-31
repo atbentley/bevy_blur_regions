@@ -27,10 +27,18 @@ fn setup(mut commands: Commands) {
     ));
 }
 
-fn update(mut blur_region_cameras: Query<&mut DefaultBlurRegionsCamera>) {
+fn update(windows: Query<&Window>, mut blur_region_cameras: Query<&mut DefaultBlurRegionsCamera>) {
+    let Ok(window) = windows.get_single() else {
+        return;
+    };
     let Ok(mut blur_regions) = blur_region_cameras.get_single_mut() else {
         return;
     };
-    blur_regions.blur(Rect::from_center_size(vec2(0.25, 0.5), vec2(0.3, 0.5)));
-    blur_regions.blur(Rect::from_center_size(vec2(0.75, 0.5), vec2(0.3, 0.5)));
+
+    let screen_size = Vec2::new(
+        window.resolution.physical_width() as f32,
+        window.resolution.physical_height() as f32,
+    );
+    blur_regions.blur(Rect::from_center_size(vec2(0.25, 0.5) * screen_size, vec2(0.3, 0.5) * screen_size));
+    blur_regions.blur(Rect::from_center_size(vec2(0.75, 0.5) * screen_size, vec2(0.3, 0.5) * screen_size));
 }
