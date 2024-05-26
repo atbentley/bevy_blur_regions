@@ -56,7 +56,7 @@ impl<const N: usize> Plugin for BlurRegionsShaderPlugin<N> {
             UniformComponentPlugin::<BlurRegionsCamera<N>>::default(),
         ));
 
-        let Ok(render_app) = app.get_sub_app_mut(RenderApp) else {
+        let Some(render_app) = app.get_sub_app_mut(RenderApp) else {
             return;
         };
 
@@ -69,7 +69,7 @@ impl<const N: usize> Plugin for BlurRegionsShaderPlugin<N> {
     }
 
     fn finish(&self, app: &mut App) {
-        let Ok(render_app) = app.get_sub_app_mut(RenderApp) else {
+        let Some(render_app) = app.get_sub_app_mut(RenderApp) else {
             return;
         };
 

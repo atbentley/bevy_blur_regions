@@ -13,7 +13,7 @@ pub fn spawn_example_scene(
     },));
     commands.spawn((PbrBundle {
         mesh: meshes.add(Capsule3d::new(0.5, 1.0)),
-        material: materials.add(Color::rgb_u8(124, 144, 255)),
+        material: materials.add(Color::srgb_u8(124, 144, 255)),
         transform: Transform::from_xyz(0.0, 1.01, 0.0),
         ..default()
     },));

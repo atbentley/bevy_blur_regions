@@ -8,7 +8,7 @@ repository = "https://github.com/atbentley/bevy_blur_regions"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-bevy = { version = "0.13", default-features = false, features = ["bevy_render"] }
+bevy = { version = "0.14.0-rc.2", default-features = false, features = ["bevy_render"] }
 bevy_egui = { version = "0.26", optional = true }
 
 [features]
@@ -22,7 +22,7 @@ bevy_ui = ["bevy/bevy_ui"]
 egui = ["dep:bevy_egui"]
 
 [dev-dependencies]
-bevy = "0.13"
+bevy = { version = "0.14.0-rc.2" }
 
 [[example]]
 name = "egui"
