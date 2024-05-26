@@ -75,6 +75,12 @@ impl<const N: usize> BlurRegionsCamera<N> {
         self.current_regions_count += 1;
     }
 
+    pub fn blur_all(&mut self, rects: &[Rect]) {
+        for rect in rects {
+            self.blur(*rect);
+        }
+    }
+
     fn clear(&mut self) {
         self.current_regions_count = 0;
     }
@@ -100,5 +106,8 @@ impl<const N: usize> Plugin for BlurRegionsPlugin<N> {
 
         #[cfg(feature = "bevy_ui")]
         app.add_plugins(crate::bevy_ui::BlurRegionsBevyUiPlugin::<N>);
+
+        #[cfg(feature = "egui")]
+        app.add_plugins(crate::egui::BlurRegionsEguiPlugin::<N>);
     }
 }
