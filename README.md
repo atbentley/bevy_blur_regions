@@ -90,6 +90,14 @@ See the examples for working implementations of all of the above.
 
 The number of blur regions that can be present on the screen at the same time is limited to 20.
 
+## Compatibility
+
+| bevy_blur_regions | bevy | bevy_egui |
+|-------------------|------|-----------|
+| 0.3               | 0.14 | 0.26      |
+| 0.2               | 0.13 | 0.26      |
+| 0.1               | 0.13 | N/A       |
+
 ## License
 
 All code in this repository is dual-licensed under either:

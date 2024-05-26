@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+#### Upgrade to Bevy 0.14
+
+Bevy Blur Regions now supports Bevy 0.14!
+
 #### Simplified egui integration
 
 The `show_with_blur` interface that enables blurring of egui windows has been simplified.
@@ -27,6 +31,7 @@ egui::Window::new("Blur").frame(frame).show_with_blur(
 
 ### Changed
 
+- bevy: Upgrade to Bevy 0.14
 - egui: Removed the need to pass in the egui's window id into the `egui::Window::show_with_blur` function. The window id is now automatically detected.
 - egui: Removed the need to pass in the `BlurRegionsCamera` into the `egui::Window::show_with_blur` function when there is only one `BlurRegionsCamera`.
 

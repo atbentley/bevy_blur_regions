@@ -1,5 +1,5 @@
 #import bevy_core_pipeline::fullscreen_vertex_shader::FullscreenVertexOutput
-#import bevy_pbr::utils::PI
+#import bevy_render::maths::PI
 
 @group(0) @binding(0) var screen_texture: texture_2d<f32>;
 @group(0) @binding(1) var texture_sampler: sampler;
