@@ -41,21 +41,11 @@ fn update(
         .rounding(0.0)
         .shadow(egui::epaint::Shadow::NONE);
 
-    egui::Window::new("Blur").frame(frame).show_with_blur(
-        egui::Id::new("Blur"),
-        &mut blur_regions,
-        contexts.ctx_mut(),
-        |ui| {
-            ui.allocate_space(egui::vec2(300.0, 150.0));
-        },
-    );
+    egui::Window::new("Blur").frame(frame).show_with_blur(&mut blur_regions, contexts.ctx_mut(), |ui| {
+        ui.allocate_space(egui::vec2(300.0, 150.0));
+    });
 
-    egui::Window::new("Blur2").frame(frame).show_with_blur(
-        egui::Id::new("Blur2"),
-        &mut blur_regions,
-        contexts.ctx_mut(),
-        |ui| {
-            ui.allocate_space(egui::vec2(300.0, 150.0));
-        },
-    );
+    egui::Window::new("Blur2").frame(frame).show_with_blur(&mut blur_regions, contexts.ctx_mut(), |ui| {
+        ui.allocate_space(egui::vec2(300.0, 150.0));
+    });
 }

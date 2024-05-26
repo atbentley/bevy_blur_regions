@@ -65,7 +65,7 @@ fn draw_ui(
 
     egui::Window::new("Blurry Window")
         .frame(frame)
-        .show_with_blur(egui::Id::new("Blurry Window"), &mut blur_regions, contexts.ctx_mut(), |ui| {
+        .show_with_blur(&mut blur_regions, contexts.ctx_mut(), |ui| {
             ui.label("This window has a nice blurry background.")
         });
 }
