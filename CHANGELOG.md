@@ -2,9 +2,33 @@
 
 ## [Unreleased]
 
+#### Simplified egui integration
+
+The `show_with_blur` interface that enables blurring of egui windows has been simplified.
+
+This simplification is a breaking change. When upgrading from 0.2.0 to 0.3.0, calls to the `show_with_blur` function will need to be modified to remove the `id` parameter.
+
+```rust
+// Before
+egui::Window::new("Blur").frame(frame).show_with_blur(
+    egui::Id::new("Blur"),
+    &mut blur_regions,
+    contexts.ctx_mut(),
+    |ui| ui.label("Blurry"),
+
+// After
+egui::Window::new("Blur").frame(frame).show_with_blur(
+    &mut blur_regions,
+    contexts.ctx_mut(),
+    |ui| ui.label("Blurry"),
+);
+```
+
 ### Added
 
 ### Changed
+
+- egui: Removed the need to specify the window id in the `egui::Window::show_with_blur` function. The window id is now automatically detected.
 
 ### Removed
 

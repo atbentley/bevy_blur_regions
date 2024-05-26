@@ -52,7 +52,7 @@ fn update(
         .default_pos(egui::pos2(300.0 / 2.0, 720.0 / 2.0))
         .pivot(egui::Align2::CENTER_CENTER)
         .resizable(false)
-        .show_with_blur(egui::Id::new("Hint"), &mut blur_regions, contexts.ctx_mut(), |ui| {
+        .show_with_blur(&mut blur_regions, contexts.ctx_mut(), |ui| {
             ui.label("All blur regions on the same\ncamera share blur settings.");
         });
 
@@ -62,7 +62,7 @@ fn update(
         .default_pos(egui::pos2(1280.0 / 2.0, 720.0 / 2.0))
         .pivot(egui::Align2::CENTER_CENTER)
         .resizable(false)
-        .show_with_blur(egui::Id::new("Settings"), &mut blur_regions, contexts.ctx_mut(), |ui| {
+        .show_with_blur(&mut blur_regions, contexts.ctx_mut(), |ui| {
             ui.add_space(50.0);
             let radius_slider = egui::Slider::new(&mut radius, 0.0..=300.0).text("Radius").suffix("px");
             ui.add(radius_slider);
