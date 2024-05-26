@@ -32,20 +32,20 @@ fn setup(mut commands: Commands) {
 
 fn update(
     mut contexts: EguiContexts,
-    mut blur_region_cameras: Query<&mut bevy_blur_regions::DefaultBlurRegionsCamera>,
+    mut blur_region_cameras: Query<Entity, With<bevy_blur_regions::DefaultBlurRegionsCamera>>,
 ) {
-    let mut blur_regions = blur_region_cameras.single_mut();
+    let entity = blur_region_cameras.single_mut();
 
     let frame = egui::Frame::window(&contexts.ctx_mut().style())
         .fill(egui::Color32::from_rgba_premultiplied(27, 27, 27, 100))
         .rounding(0.0)
         .shadow(egui::epaint::Shadow::NONE);
 
-    egui::Window::new("Blur").frame(frame).show_with_blur(&mut blur_regions, contexts.ctx_mut(), |ui| {
+    egui::Window::new("Blur").frame(frame).show_with_blur(contexts.ctx_mut(), |ui| {
         ui.allocate_space(egui::vec2(300.0, 150.0));
     });
 
-    egui::Window::new("Blur2").frame(frame).show_with_blur(&mut blur_regions, contexts.ctx_mut(), |ui| {
+    egui::Window::new("Blur2").frame(frame).show_with_blur_on_camera(entity, contexts.ctx_mut(), |ui| {
         ui.allocate_space(egui::vec2(300.0, 150.0));
     });
 }
