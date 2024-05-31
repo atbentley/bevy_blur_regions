@@ -37,14 +37,12 @@ fn update(
     let mut blur_regions = blur_region_cameras.single_mut();
 
     let frame = egui::Frame::window(&contexts.ctx_mut().style())
-        .fill(egui::Color32::from_rgba_premultiplied(27, 27, 27, 225))
+        .fill(egui::Color32::from_rgba_premultiplied(27, 27, 27, 180))
         .rounding(0.0)
         .inner_margin(egui::Margin::same(50.0))
         .shadow(egui::epaint::Shadow::NONE);
 
-    let mut radius = blur_regions.radius;
-    let mut linear_steps = blur_regions.linear_steps;
-    let mut radial_steps = blur_regions.radial_steps;
+    let mut circle_of_confusion = blur_regions.circle_of_confusion;
 
     egui::Window::new("Hint")
         .frame(frame)
@@ -64,22 +62,12 @@ fn update(
         .resizable(false)
         .show_with_blur(contexts.ctx_mut(), |ui| {
             ui.add_space(50.0);
-            let radius_slider = egui::Slider::new(&mut radius, 0.0..=300.0).text("Radius").suffix("px");
-            ui.add(radius_slider);
-            let linear_steps_slider = egui::Slider::new(&mut linear_steps, 0..=32).text("Linear steps");
-            ui.add(linear_steps_slider);
-            let radial_steps_slider = egui::Slider::new(&mut radial_steps, 0..=32).text("Radial steps");
-            ui.add(radial_steps_slider);
-            ui.add_space(50.0);
+            let circle_of_confusion_slider =
+                egui::Slider::new(&mut circle_of_confusion, 0.0..=300.0).text("Circle of confusion").suffix("px");
+            ui.add(circle_of_confusion_slider);
         });
 
-    if blur_regions.radius != radius {
-        blur_regions.radius = radius;
-    }
-    if blur_regions.linear_steps != linear_steps {
-        blur_regions.linear_steps = linear_steps;
-    }
-    if blur_regions.radial_steps != radial_steps {
-        blur_regions.radial_steps = radial_steps;
+    if blur_regions.circle_of_confusion != circle_of_confusion {
+        blur_regions.circle_of_confusion = circle_of_confusion;
     }
 }

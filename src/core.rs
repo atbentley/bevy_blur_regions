@@ -33,16 +33,13 @@ pub type DefaultBlurRegionsCamera = BlurRegionsCamera<DEFAULT_MAX_BLUR_REGIONS_C
 /// settings for the blurring.
 #[derive(Component, Debug, Clone, ExtractComponent, ShaderType)]
 pub struct BlurRegionsCamera<const N: usize> {
-    /// The radius of the circle around the current pixel which will be used for blurring.
-    /// A larger radius will make the image appear more blurry.
+    /// The diameter of the circle of confusion around the current pixel that is being blurred.
+    /// A larger diameter will make the image appear more blurry.
     /// In physical pixels.
-    pub radius: f32,
-    /// The number of steps to sample from the pixel being blurred to the edge of the radius.
-    /// More steps leads to a higher quality blur, but at a performance cost.
-    pub linear_steps: u32,
-    /// The number of steps to sample radially around the pixel that is being blurred
-    /// More steps leads to a higher quality blur, but at a performance cost.
-    pub radial_steps: u32,
+    /// https://en.wikipedia.org/wiki/Circle_of_confusion
+    pub circle_of_confusion: f32,
+    padding_8: u32,
+    padding_16: u32,
     current_regions_count: u32,
     regions: [ComputedBlurRegion; N],
 }
@@ -50,9 +47,9 @@ pub struct BlurRegionsCamera<const N: usize> {
 impl Default for BlurRegionsCamera<DEFAULT_MAX_BLUR_REGIONS_COUNT> {
     fn default() -> Self {
         BlurRegionsCamera {
-            radius: 32.0,
-            linear_steps: 8,
-            radial_steps: 16,
+            circle_of_confusion: 100.0,
+            padding_8: 0,
+            padding_16: 0,
             current_regions_count: 0,
             regions: std::array::from_fn(|_| ComputedBlurRegion::OFFSCREEN),
         }
