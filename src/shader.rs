@@ -75,10 +75,7 @@ impl<const N: usize> Plugin for BlurRegionsShaderPlugin<N> {
                 (prepare_blur_regions_pipelines::<N>.in_set(RenderSet::Prepare),),
             )
             .add_render_graph_node::<ViewNodeRunner<BlurRegionsNode<N>>>(Core3d, BlurRegionsLabel)
-            .add_render_graph_edges(
-                Core3d,
-                (Node3d::Tonemapping, BlurRegionsLabel, Node3d::EndMainPassPostProcessing),
-            );
+            .add_render_graph_edges(Core3d, (Node3d::DepthOfField, BlurRegionsLabel, Node3d::Tonemapping));
     }
 
     fn finish(&self, app: &mut App) {
@@ -192,7 +189,6 @@ pub struct BlurRegionsPipelineKey {
     pass: BlurRegionsPassKey,
     hdr: bool,
 }
-
 
 #[derive(PartialEq, Eq, Hash, Clone, Copy)]
 enum BlurRegionsPassKey {

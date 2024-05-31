@@ -30,6 +30,7 @@ egui::Window::new("Blur").frame(frame).show_with_blur(
 ### Added
 
 - Add support for HDR render targets.
+- Add support for deband dithering during tonemapping.
 
 ### Changed
 
