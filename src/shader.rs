@@ -1,4 +1,4 @@
-use bevy::asset::embedded_asset;
+use bevy::asset::load_internal_asset;
 use bevy::core_pipeline::core_3d::graph::Core3d;
 use bevy::core_pipeline::core_3d::graph::Node3d;
 use bevy::core_pipeline::fullscreen_vertex_shader::fullscreen_shader_vertex_state;
@@ -45,11 +45,13 @@ use bevy::render::RenderApp;
 
 use crate::BlurRegionsCamera;
 
+const SHADER_HANDLE: Handle<Shader> = Handle::weak_from_u128(271147050642476932735403127655134602927);
+
 pub struct BlurRegionsShaderPlugin<const N: usize>;
 
 impl<const N: usize> Plugin for BlurRegionsShaderPlugin<N> {
     fn build(&self, app: &mut App) {
-        embedded_asset!(app, "shader.wgsl");
+        load_internal_asset!(app, SHADER_HANDLE, "shader.wgsl", Shader::from_wgsl);
 
         app.add_plugins((
             ExtractComponentPlugin::<BlurRegionsCamera<N>>::default(),
@@ -169,14 +171,12 @@ impl<const N: usize> FromWorld for BlurRegionsPipeline<N> {
         );
 
         let sampler = render_device.create_sampler(&SamplerDescriptor::default());
-        let shader = world.resource::<AssetServer>().load("embedded://bevy_blur_regions/shader.wgsl");
         let mut pipeline_cache = world.resource_mut::<PipelineCache>();
 
         let passes = [
             make_pipeline::<N>(
                 &mut pipeline_cache,
                 layout.clone(),
-                shader.clone(),
                 "horizontal",
                 "blur regions (horizontal pass)",
                 "blur regions bind group (horizontal pass)",
@@ -184,7 +184,6 @@ impl<const N: usize> FromWorld for BlurRegionsPipeline<N> {
             make_pipeline::<N>(
                 &mut pipeline_cache,
                 layout.clone(),
-                shader.clone(),
                 "vertical",
                 "blur regions (vertical pass)",
                 "blur regions bind group (vertical pass)",
@@ -202,7 +201,6 @@ impl<const N: usize> FromWorld for BlurRegionsPipeline<N> {
 fn make_pipeline<const N: usize>(
     pipeline_cache: &mut PipelineCache,
     layout: BindGroupLayout,
-    shader: Handle<Shader>,
     entrypoint: &'static str,
     pass_label: &'static str,
     bind_group_label: &'static str,
@@ -212,7 +210,7 @@ fn make_pipeline<const N: usize>(
         layout: vec![layout],
         vertex: fullscreen_shader_vertex_state(),
         fragment: Some(FragmentState {
-            shader,
+            shader: SHADER_HANDLE,
             shader_defs: vec![ShaderDefVal::UInt("MAX_BLUR_REGIONS_COUNT".into(), N as u32)],
             entry_point: entrypoint.into(),
             targets: vec![Some(ColorTargetState {
