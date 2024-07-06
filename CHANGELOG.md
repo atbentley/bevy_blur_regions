@@ -1,10 +1,30 @@
 # Changelog
 
-## [Unreleased]
+## 0.3.0 - 2024-07-06
+
+This release upgrades to Bevy 0.14 as well as introduces a number of changes.
 
 #### Upgrade to Bevy 0.14
 
 Bevy Blur Regions now supports Bevy 0.14!
+
+### Improved blurring algorithm
+
+The blurring is now a proper gaussian blur.
+
+As apart of this improvement, the blur settings are now simplified. Applications that were previously making use of the blur settings will need to be updated. The `settings` example provides an interactive approach to gaining an understanding in how the settings influence the appearance of the blur.
+
+```rust
+// Before
+blur_region_camera.radius = some_radius;
+blur_region_camera.linear_steps = some_linear_steps;
+blur_region_camera.radial_steps = some_radial_steps;
+
+// After
+blur_region_camera.circle_of_confusion = some_circle_of_confusion;
+```
+
+Thanks to pcwalton for the depth of field contribution to the bevy engine, which this feature is now based off.
 
 #### Simplified egui integration
 
@@ -35,6 +55,7 @@ egui::Window::new("Blur").frame(frame).show_with_blur(
 ### Changed
 
 - Improve the blurring algorithm. The new implementation utilises the gaussian blur implementation originally contributed to bevy for the depth of field feature.
+- Change the settings on `BlurRegionsCamera` to only expose a new setting `circle_of_confusion` (previously it was `radius`, `linear_steps`, and `radial_steps`).
 - egui: Removed the need to pass in the egui's window id into the `egui::Window::show_with_blur` function. The window id is now automatically detected.
 - egui: Removed the need to pass in the `BlurRegionsCamera` into the `egui::Window::show_with_blur` function when there is only one `BlurRegionsCamera`.
 - bevy: Upgrade to Bevy 0.14.
