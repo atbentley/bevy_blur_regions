@@ -34,10 +34,11 @@ egui::Window::new("Blur").frame(frame).show_with_blur(
 
 ### Changed
 
-- bevy: Upgrade to Bevy 0.14.
 - Improve the blurring algorithm. The new implementation utilises the gaussian blur implementation originally contributed to bevy for the depth of field feature.
 - egui: Removed the need to pass in the egui's window id into the `egui::Window::show_with_blur` function. The window id is now automatically detected.
 - egui: Removed the need to pass in the `BlurRegionsCamera` into the `egui::Window::show_with_blur` function when there is only one `BlurRegionsCamera`.
+- bevy: Upgrade to Bevy 0.14.
+- egui: Upgrade to egui 0.28.
 
 ### Removed
 
