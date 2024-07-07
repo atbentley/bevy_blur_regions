@@ -169,7 +169,7 @@ pub fn extract_egui_blurs<const N: usize>(
                 EguiBlurTarget::DefaultCamera => {
                     if let Ok(mut blur_regions) = blur_region_cameras.get_single_mut() {
                         blur_regions.blur_all(
-                            &egui_blur_regions.regions[0..=(egui_blur_regions.current_regions_count as usize)],
+                            &egui_blur_regions.regions[0..(egui_blur_regions.current_regions_count as usize)],
                         );
                     } else {
                         debug!("No default BlurRegionsCamera exists, skipping blurring.");
@@ -178,7 +178,7 @@ pub fn extract_egui_blurs<const N: usize>(
                 EguiBlurTarget::Entity(entity) => {
                     if let Ok(mut blur_regions) = blur_region_cameras.get_mut(entity) {
                         blur_regions.blur_all(
-                            &egui_blur_regions.regions[0..=(egui_blur_regions.current_regions_count as usize)],
+                            &egui_blur_regions.regions[0..(egui_blur_regions.current_regions_count as usize)],
                         );
                     } else {
                         debug!("No BlurRegionsCamera exists for entity {entity:?}, skipping blurring.");

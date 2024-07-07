@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Fix an issue where blur regions from removed egui windows would remain on screen.
+
 ## 0.3.0 - 2024-07-06
 
 This release upgrades to Bevy 0.14 as well as introduces a number of changes.
