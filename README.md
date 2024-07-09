@@ -54,10 +54,7 @@ When using egui, enable the `egui` feature and then use the `show_with_blur` fun
 ```rust
 fn draw_ui(
     mut contexts: EguiContexts,
-    mut blur_region_cameras: Query<&mut bevy_blur_regions::DefaultBlurRegionsCamera>)
 {
-    let mut blur_regions = blur_region_cameras.single_mut();
-
     let frame = egui::Frame::window(&contexts.ctx_mut().style())
         .fill(egui::Color32::from_rgba_premultiplied(27, 27, 27, 100))
         .rounding(0.0)
@@ -65,7 +62,7 @@ fn draw_ui(
 
     egui::Window::new("Blurry Window")
         .frame(frame)
-        .show_with_blur(&mut blur_regions, contexts.ctx_mut(), |ui| {
+        .show_with_blur(contexts.ctx_mut(), |ui| {
             ui.label("This window has a nice blurry background.")
         });
 }
