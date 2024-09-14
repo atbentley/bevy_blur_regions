@@ -38,6 +38,7 @@ fn setup(mut commands: Commands) {
         BlurRegion,
         NodeBundle {
             border_color: Color::BLACK.into(),
+            border_radius: BorderRadius::new(Val::ZERO, Val::Percent(5.0), Val::Percent(10.0), Val::Percent(15.0)),
             style: Style {
                 width: Val::Percent(50.0),
                 height: Val::Percent(50.0),

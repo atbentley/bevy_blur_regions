@@ -16,6 +16,7 @@ struct ComputedBlurRegion {
     max_x: f32,
     min_y: f32,
     max_y: f32,
+    border_radii: Vec4,
 }
 
 impl ComputedBlurRegion {
@@ -24,6 +25,7 @@ impl ComputedBlurRegion {
         max_x: -1.0,
         min_y: -1.0,
         max_y: -1.0,
+        border_radii: Vec4::ZERO,
     };
 }
 
@@ -58,6 +60,10 @@ impl Default for BlurRegionsCamera<DEFAULT_MAX_BLUR_REGIONS_COUNT> {
 
 impl<const N: usize> BlurRegionsCamera<N> {
     pub fn blur(&mut self, rect: Rect) {
+        self.rounded_blur(rect, Vec4::ZERO);
+    }
+
+    pub fn rounded_blur(&mut self, rect: Rect, border_radii: Vec4) {
         if self.current_regions_count == N as u32 {
             warn!("Blur region ignored as the max blur region count has already been reached");
             return;
@@ -68,6 +74,7 @@ impl<const N: usize> BlurRegionsCamera<N> {
             max_x: rect.max.x,
             min_y: rect.min.y,
             max_y: rect.max.y,
+            border_radii,
         };
         self.current_regions_count += 1;
     }
@@ -75,6 +82,12 @@ impl<const N: usize> BlurRegionsCamera<N> {
     pub fn blur_all(&mut self, rects: &[Rect]) {
         for rect in rects {
             self.blur(*rect);
+        }
+    }
+
+    pub fn rounded_blur_all(&mut self, rects: &[(Rect, Vec4)]) {
+        for rect in rects {
+            self.rounded_blur(rect.0, rect.1);
         }
     }
 
