@@ -56,14 +56,19 @@ fn sd_rounded_box(point: vec2<f32>, size: vec2<f32>, corner_radii: vec4<f32>) ->
 fn is_blurred(position: vec4<f32>) -> bool {
     for (var i = 0; u32(i) < blur_regions.current_regions_count; i++ ) {
         let center = vec2(
-          (blur_regions.regions[i].max_x + blur_regions.regions[i].min_x)/2.0,
-          (blur_regions.regions[i].max_y + blur_regions.regions[i].min_y)/2.0
+            (blur_regions.regions[i].max_x + blur_regions.regions[i].min_x)/2.0,
+            (blur_regions.regions[i].max_y + blur_regions.regions[i].min_y)/2.0
         );
         let dims = vec2(
-          abs(blur_regions.regions[i].max_x) - abs(blur_regions.regions[i].min_x),
-          abs(blur_regions.regions[i].max_y) - abs(blur_regions.regions[i].min_y)
+            abs(blur_regions.regions[i].max_x) - abs(blur_regions.regions[i].min_x),
+            abs(blur_regions.regions[i].max_y) - abs(blur_regions.regions[i].min_y)
         );
-        return sd_rounded_box(position.xy - center, dims, blur_regions.regions[i].border_radii) <= 0.0;
+        if sd_rounded_box(
+            position.xy - center,
+            dims,
+            blur_regions.regions[i].border_radii) <= 0.0 {
+          return true;
+        }
     }
     return false;
 }
