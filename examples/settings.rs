@@ -38,7 +38,8 @@ fn update(
 
     let frame = egui::Frame::window(&contexts.ctx_mut().style())
         .fill(egui::Color32::from_rgba_premultiplied(27, 27, 27, 180))
-        .rounding(0.0)
+        .rounding(15.0)
+        .stroke(egui::Stroke::NONE)
         .inner_margin(egui::Margin::same(50.0))
         .shadow(egui::epaint::Shadow::NONE);
 
