@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### Support for rounded blur regions
+
+Blur regions now support border radius! Use border radius as normal in Bevy UI or egui and the property will automatically be picked up by the shader, no additional config in application code is needed.
+
+Thanks to rlofc for contributing support for this.
+
+### Added
+
+- Support for rounded blur regions
+
 ### Fixed
 
 - Fix an issue where blur regions from removed egui windows would remain on screen.

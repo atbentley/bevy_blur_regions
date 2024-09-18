@@ -1,6 +1,7 @@
 use bevy::math::vec2;
 use bevy::prelude::*;
 use bevy_egui::egui;
+use bevy_egui::egui::Rounding;
 use bevy_egui::EguiContext;
 
 use crate::core::DEFAULT_MAX_BLUR_REGIONS_COUNT;
@@ -24,7 +25,7 @@ enum EguiBlurTarget {
 struct EguiBlurRegions<const N: usize> {
     target: EguiBlurTarget,
     current_regions_count: u32,
-    regions: [Rect; N],
+    regions: [(Rect, Vec4); N],
 }
 
 impl<const N: usize> Default for EguiBlurRegions<N> {
@@ -32,19 +33,19 @@ impl<const N: usize> Default for EguiBlurRegions<N> {
         EguiBlurRegions {
             target: EguiBlurTarget::DefaultCamera,
             current_regions_count: 0,
-            regions: std::array::from_fn(|_| Rect::new(-1.0, -1.0, -1.0, -1.0)),
+            regions: std::array::from_fn(|_| (Rect::new(-1.0, -1.0, -1.0, -1.0), Vec4::ZERO)),
         }
     }
 }
 
 impl<const N: usize> EguiBlurRegions<N> {
-    pub fn blur(&mut self, rect: Rect) {
+    pub fn blur(&mut self, rect: Rect, rounding: Vec4) {
         if self.current_regions_count == N as u32 {
             warn!("Blur region ignored as the max blur region count has already been reached");
             return;
         }
 
-        self.regions[self.current_regions_count as usize] = rect;
+        self.regions[self.current_regions_count as usize] = (rect, rounding);
         self.current_regions_count += 1;
     }
 
@@ -85,8 +86,20 @@ fn get_egui_blur_rect<R>(
     window: egui::Window<'_>,
     ctx: &egui::Context,
     add_contents: impl FnOnce(&mut egui::Ui) -> R,
-) -> Option<(egui::InnerResponse<Option<R>>, Rect)> {
-    let Some(response) = window.show(ctx, add_contents) else {
+) -> Option<(egui::InnerResponse<Option<R>>, Rect, egui::Rounding)> {
+    let mut rounding = egui::Rounding::ZERO;
+
+    let Some(response) = window.show(ctx, |ui| {
+        // When drawing a window, the frame for that window can be found on the UiStack of the grandparent of the current UiStack
+        rounding = ui
+            .stack()
+            .parent
+            .as_ref()
+            .and_then(|s| s.parent.as_ref())
+            .map(|s| s.frame().rounding)
+            .unwrap_or(Rounding::ZERO);
+        add_contents(ui)
+    }) else {
         return None;
     };
 
@@ -100,7 +113,9 @@ fn get_egui_blur_rect<R>(
     let min = vec2(egui_rect.min.x, egui_rect.min.y) * scale_factor;
     let max = vec2(egui_rect.max.x, egui_rect.max.y) * scale_factor;
 
-    Some((response, Rect::from_corners(min, max)))
+    rounding = rounding * scale_factor;
+
+    Some((response, Rect::from_corners(min, max), rounding))
 }
 
 impl<'open> EguiWindowBlurExt for egui::Window<'open> {
@@ -117,12 +132,12 @@ impl<'open> EguiWindowBlurExt for egui::Window<'open> {
         ctx: &egui::Context,
         add_contents: impl FnOnce(&mut egui::Ui) -> R,
     ) -> Option<egui::InnerResponse<Option<R>>> {
-        let (response, blur_rect) = get_egui_blur_rect(self, ctx, add_contents)?;
+        let (response, blur_rect, rounding) = get_egui_blur_rect(self, ctx, add_contents)?;
 
         ctx.memory_mut(|mem| {
             let egui_blur_regions: &mut EguiBlurRegions<N> = mem.data.get_temp_mut_or_default(egui::Id::NULL);
             egui_blur_regions.target = EguiBlurTarget::DefaultCamera;
-            egui_blur_regions.blur(blur_rect);
+            egui_blur_regions.blur(blur_rect, Vec4::new(rounding.nw, rounding.ne, rounding.se, rounding.sw));
         });
 
         Some(response)
@@ -143,12 +158,12 @@ impl<'open> EguiWindowBlurExt for egui::Window<'open> {
         ctx: &egui::Context,
         add_contents: impl FnOnce(&mut egui::Ui) -> R,
     ) -> Option<egui::InnerResponse<Option<R>>> {
-        let (response, blur_rect) = get_egui_blur_rect(self, ctx, add_contents)?;
+        let (response, blur_rect, rounding) = get_egui_blur_rect(self, ctx, add_contents)?;
 
         ctx.memory_mut(|mem| {
             let egui_blur_regions: &mut EguiBlurRegions<N> = mem.data.get_temp_mut_or_default(egui::Id::NULL);
             egui_blur_regions.target = EguiBlurTarget::Entity(camera_entity);
-            egui_blur_regions.blur(blur_rect);
+            egui_blur_regions.blur(blur_rect, Vec4::new(rounding.nw, rounding.ne, rounding.se, rounding.sw));
         });
 
         Some(response)
@@ -168,7 +183,7 @@ pub fn extract_egui_blurs<const N: usize>(
             match egui_blur_regions.target {
                 EguiBlurTarget::DefaultCamera => {
                     if let Ok(mut blur_regions) = blur_region_cameras.get_single_mut() {
-                        blur_regions.blur_all(
+                        blur_regions.rounded_blur_all(
                             &egui_blur_regions.regions[0..(egui_blur_regions.current_regions_count as usize)],
                         );
                     } else {
@@ -177,7 +192,7 @@ pub fn extract_egui_blurs<const N: usize>(
                 }
                 EguiBlurTarget::Entity(entity) => {
                     if let Ok(mut blur_regions) = blur_region_cameras.get_mut(entity) {
-                        blur_regions.blur_all(
+                        blur_regions.rounded_blur_all(
                             &egui_blur_regions.regions[0..(egui_blur_regions.current_regions_count as usize)],
                         );
                     } else {
