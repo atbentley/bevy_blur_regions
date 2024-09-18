@@ -14,9 +14,10 @@ impl<const N: usize> Plugin for BlurRegionsBevyUiPlugin<N> {
 }
 
 pub fn compute_blur_regions<const N: usize>(
-    nodes: Query<(&Node, &GlobalTransform), With<BlurRegion>>,
+    nodes: Query<(&Node, &GlobalTransform, &BorderRadius), With<BlurRegion>>,
     mut blur_regions_cameras: Query<(&Camera, &mut BlurRegionsCamera<N>)>,
     primary_window: Query<Entity, With<PrimaryWindow>>,
+    ui_scale: Res<UiScale>,
     windows: Query<&Window>,
 ) {
     for (camera, mut blur_regions) in &mut blur_regions_cameras {
@@ -32,13 +33,22 @@ pub fn compute_blur_regions<const N: usize>(
             continue;
         };
 
-        for (node, transform) in &nodes {
+        let viewport_size = window.size() / ui_scale.0;
+
+        for (node, transform, border_radius) in &nodes {
             let translation = transform.translation();
             let region = Rect::from_center_size(
                 translation.xy() * window.scale_factor(),
                 node.size() * window.scale_factor(),
             );
-            blur_regions.blur(region);
+            let resolved = [
+                border_radius.top_left,
+                border_radius.top_right,
+                border_radius.bottom_right,
+                border_radius.bottom_left,
+            ]
+            .map(|v| v.resolve(node.size().y, viewport_size).unwrap_or(0.0) * window.scale_factor());
+            blur_regions.rounded_blur(region, bevy::prelude::Vec4::from_array(resolved));
         }
     }
 }
