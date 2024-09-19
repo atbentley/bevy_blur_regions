@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.4.0 - 2024-09-19
 
 ### Support for rounded blur regions
 
