@@ -1,4 +1,6 @@
 use bevy::asset::load_internal_asset;
+use bevy::core_pipeline::core_2d::graph::Core2d;
+use bevy::core_pipeline::core_2d::graph::Node2d;
 use bevy::core_pipeline::core_3d::graph::Core3d;
 use bevy::core_pipeline::core_3d::graph::Node3d;
 use bevy::core_pipeline::fullscreen_vertex_shader::fullscreen_shader_vertex_state;
@@ -75,7 +77,9 @@ impl<const N: usize> Plugin for BlurRegionsShaderPlugin<N> {
                 (prepare_blur_regions_pipelines::<N>.in_set(RenderSet::Prepare),),
             )
             .add_render_graph_node::<ViewNodeRunner<BlurRegionsNode<N>>>(Core3d, BlurRegionsLabel)
-            .add_render_graph_edges(Core3d, (Node3d::DepthOfField, BlurRegionsLabel, Node3d::Tonemapping));
+            .add_render_graph_edges(Core3d, (Node3d::DepthOfField, BlurRegionsLabel, Node3d::Tonemapping))
+            .add_render_graph_node::<ViewNodeRunner<BlurRegionsNode<N>>>(Core2d, BlurRegionsLabel)
+            .add_render_graph_edges(Core2d, (Node2d::Bloom, BlurRegionsLabel, Node2d::Tonemapping));
     }
 
     fn finish(&self, app: &mut App) {
