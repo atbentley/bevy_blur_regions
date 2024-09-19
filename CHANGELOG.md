@@ -8,9 +8,14 @@ Blur regions now respect the Visibility component of a node in Bevy UI. When a n
 
 Thanks to Tam for contributing support for this.
 
+### Support for 2D cameras
+
+2D cameras are now supported. There are no additional configuration steps required to make use of blurring with 2D cameras, add the `BlurRegionsCamera` component to the camera whose output should be blurred, and then add create blur regions as normal.
+
 ### Added
 
 - Support for Visibility on bevy ui nodes.
+- Support for 2D cameras
 
 ## 0.4.0 - 2024-09-19
 
