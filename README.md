@@ -91,6 +91,7 @@ The number of blur regions that can be present on the screen at the same time is
 
 | bevy_blur_regions | bevy | bevy_egui |
 |-------------------|------|-----------|
+| 0.4.0             | 0.14 | 0.28      |
 | 0.3.0             | 0.14 | 0.28      |
 | 0.2.0             | 0.13 | 0.26      |
 | 0.1.0             | 0.13 | N/A       |

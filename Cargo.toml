@@ -1,6 +1,6 @@
 [package]
 name = "bevy_blur_regions"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Andrew Bentley <andrew@bentley.codes>"]
 edition = "2021"
 description = "A Bevy plugin to selectively blur regions of the screen"
