@@ -50,9 +50,14 @@ fn setup(mut commands: Commands) {
     ));
 }
 
-fn move_node(time: Res<Time>, mut nodes: Query<&mut Style>) {
-    for mut style in &mut nodes {
+fn move_node(
+    time: Res<Time>,
+    mut nodes: Query<(&mut Style, &mut Visibility)>,
+) {
+    for (mut style, mut visibility) in &mut nodes {
         style.left = Val::Percent((time.elapsed_seconds().cos() + 1.0) / 2.0 * 50.0);
         style.top = Val::Percent((time.elapsed_seconds().sin() + 1.0) / 2.0 * 50.0);
+        
+        *visibility = if time.elapsed_seconds() % 2. < 1. { Visibility::Visible } else { Visibility::Hidden };
     }
 }
