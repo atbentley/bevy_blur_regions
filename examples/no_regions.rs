@@ -11,7 +11,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_plugins(BlurRegionsPlugin::default())
-        .add_systems(Startup, (setup, utils::spawn_example_scene))
+        .add_systems(Startup, (setup, utils::spawn_example_scene_3d))
         .run();
 }
 

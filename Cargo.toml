@@ -25,6 +25,11 @@ egui = ["dep:bevy_egui"]
 bevy = { version = "0.14" }
 
 [[example]]
+name = "2d_egui"
+path = "examples/2d_egui.rs"
+required-features = ["egui"]
+
+[[example]]
 name = "egui"
 path = "examples/egui.rs"
 required-features = ["egui"]
