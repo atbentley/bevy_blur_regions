@@ -1,5 +1,5 @@
-// Demonstrates how to add blurring to egui windows.
-//   cargo run --example egui --features egui
+// Demonstrates using a 2d camera with egui.
+//   cargo run --example 2d_egui --features egui
 
 #[path = "./utils.rs"]
 mod utils;
@@ -15,19 +15,13 @@ fn main() {
         .add_plugins(DefaultPlugins)
         .add_plugins(EguiPlugin)
         .add_plugins(BlurRegionsPlugin::default())
-        .add_systems(Startup, (setup, utils::spawn_example_scene_3d))
+        .add_systems(Startup, (setup, utils::spawn_example_scene_2d))
         .add_systems(Update, update)
         .run();
 }
 
 fn setup(mut commands: Commands) {
-    commands.spawn((
-        DefaultBlurRegionsCamera::default(),
-        Camera3dBundle {
-            transform: Transform::from_xyz(-2.5, 4.5, 9.0).looking_at(Vec3::ZERO, Vec3::Y),
-            ..default()
-        },
-    ));
+    commands.spawn((Camera2dBundle::default(), DefaultBlurRegionsCamera::default()));
 }
 
 fn update(
@@ -37,15 +31,19 @@ fn update(
     let entity = blur_region_cameras.single_mut();
 
     let frame = egui::Frame::window(&contexts.ctx_mut().style())
-        .fill(egui::Color32::from_rgba_premultiplied(27, 27, 27, 100))
-        .rounding(0.0)
+        .fill(egui::Color32::from_white_alpha(10))
+        .rounding(10.0)
         .shadow(egui::epaint::Shadow::NONE);
 
-    egui::Window::new("Blur").frame(frame).show_with_blur(contexts.ctx_mut(), |ui| {
+    egui::Window::new("Blur").frame(frame).title_bar(false).resizable(false).show_with_blur(contexts.ctx_mut(), |ui| {
         ui.allocate_space(egui::vec2(300.0, 150.0));
     });
 
-    egui::Window::new("Blur2").frame(frame).show_with_blur_on_camera(entity, contexts.ctx_mut(), |ui| {
-        ui.allocate_space(egui::vec2(300.0, 150.0));
-    });
+    egui::Window::new("Blur2").frame(frame).title_bar(false).resizable(false).show_with_blur_on_camera(
+        entity,
+        contexts.ctx_mut(),
+        |ui| {
+            ui.allocate_space(egui::vec2(300.0, 150.0));
+        },
+    );
 }
