@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Support for the Visibility component in Bevy UI
+
+Blur regions now respect the Visibility component of a node in Bevy UI. When a node is invisible, the blur region is not rendered. No additional config in application code is required to enable Visiblity support.
+
+Thanks to Tam for contributing support for this.
+
+### Added
+
+- Support for Visibility on bevy ui nodes.
+
 ## 0.4.0 - 2024-09-19
 
 ### Support for rounded blur regions
