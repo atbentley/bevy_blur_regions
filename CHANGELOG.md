@@ -17,6 +17,10 @@ Thanks to Tam for contributing support for this.
 - Support for Visibility on bevy ui nodes.
 - Support for 2D cameras
 
+## Changed
+
+- egui: Upgrade to bevy_egui 0.30.
+
 ## 0.4.0 - 2024-09-19
 
 ### Support for rounded blur regions
