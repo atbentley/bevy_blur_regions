@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.5.0 - 2024-10-27
 
 ### Support for the Visibility component in Bevy UI
 
