@@ -36,8 +36,10 @@ pub fn compute_blur_regions<const N: usize>(
         let viewport_size = window.size() / ui_scale.0;
 
         for (node, transform, border_radius, visibility) in &nodes {
-            if visibility.get() == false { continue; }
-            
+            if visibility.get() == false {
+                continue;
+            }
+
             let translation = transform.translation();
             let region = Rect::from_center_size(
                 translation.xy() * window.scale_factor(),
