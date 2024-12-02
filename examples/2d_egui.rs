@@ -21,7 +21,7 @@ fn main() {
 }
 
 fn setup(mut commands: Commands) {
-    commands.spawn((Camera2dBundle::default(), DefaultBlurRegionsCamera::default()));
+    commands.spawn((Camera2d::default(), DefaultBlurRegionsCamera::default()));
 }
 
 fn update(

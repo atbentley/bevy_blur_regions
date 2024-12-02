@@ -14,7 +14,7 @@ impl<const N: usize> Plugin for BlurRegionsBevyUiPlugin<N> {
 }
 
 pub fn compute_blur_regions<const N: usize>(
-    nodes: Query<(&Node, &GlobalTransform, &BorderRadius, &ViewVisibility), With<BlurRegion>>,
+    nodes: Query<(&ComputedNode, &GlobalTransform, &BorderRadius, &ViewVisibility), With<BlurRegion>>,
     mut blur_regions_cameras: Query<(&Camera, &mut BlurRegionsCamera<N>)>,
     primary_window: Query<Entity, With<PrimaryWindow>>,
     ui_scale: Res<UiScale>,

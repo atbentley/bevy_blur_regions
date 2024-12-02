@@ -23,16 +23,10 @@ fn main() {
 fn setup(mut commands: Commands) {
     commands.spawn((
         DefaultBlurRegionsCamera::default(),
-        Camera3dBundle {
-            // Enable HDR on the camera to enable tonemapping.
-            // Fullscreen dithering runs in the tonemapping shader, which is
-            // only enabled when HDR is enabled.
-            camera: Camera { hdr: true, ..default() },
-            // Enable deband dithering.
-            deband_dither: DebandDither::Enabled,
-            transform: Transform::from_xyz(-2.5, 4.5, 9.0).looking_at(Vec3::ZERO, Vec3::Y),
-            ..default()
-        },
+        Camera3d::default(),
+        Camera { hdr: true, ..default() },
+        Transform::from_xyz(-2.5, 4.5, 9.0).looking_at(Vec3::ZERO, Vec3::Y),
+        DebandDither::Enabled,
     ));
 }
 

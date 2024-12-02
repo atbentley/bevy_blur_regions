@@ -19,7 +19,7 @@ use bevy::render::render_graph::ViewNodeRunner;
 use bevy::render::render_resource::binding_types::sampler;
 use bevy::render::render_resource::binding_types::texture_2d;
 use bevy::render::render_resource::binding_types::uniform_buffer;
-use bevy::render::render_resource::BindGroupEntries;
+use bevy::render::render_resource::{AddressMode, BindGroupEntries};
 use bevy::render::render_resource::BindGroupLayout;
 use bevy::render::render_resource::BindGroupLayoutEntries;
 use bevy::render::render_resource::CachedRenderPipelineId;
@@ -44,7 +44,6 @@ use bevy::render::render_resource::TextureFormat;
 use bevy::render::render_resource::TextureSampleType;
 use bevy::render::renderer::RenderContext;
 use bevy::render::renderer::RenderDevice;
-use bevy::render::texture::BevyDefault;
 use bevy::render::view::ExtractedView;
 use bevy::render::view::ViewTarget;
 use bevy::render::Render;
@@ -77,9 +76,11 @@ impl<const N: usize> Plugin for BlurRegionsShaderPlugin<N> {
                 (prepare_blur_regions_pipelines::<N>.in_set(RenderSet::Prepare),),
             )
             .add_render_graph_node::<ViewNodeRunner<BlurRegionsNode<N>>>(Core3d, BlurRegionsLabel)
-            .add_render_graph_edges(Core3d, (Node3d::DepthOfField, BlurRegionsLabel, Node3d::Tonemapping))
+            .add_render_graph_edges(Core3d, (Node3d::Tonemapping, BlurRegionsLabel, Node3d::Smaa))
+            .add_render_graph_edges(Core3d, (BlurRegionsLabel, Node3d::Fxaa))
             .add_render_graph_node::<ViewNodeRunner<BlurRegionsNode<N>>>(Core2d, BlurRegionsLabel)
-            .add_render_graph_edges(Core2d, (Node2d::Bloom, BlurRegionsLabel, Node2d::Tonemapping));
+            .add_render_graph_edges(Core2d, (Node2d::Tonemapping, BlurRegionsLabel, Node2d::Smaa))
+            .add_render_graph_edges(Core2d, (BlurRegionsLabel, Node2d::Fxaa));
     }
 
     fn finish(&self, app: &mut App) {
@@ -173,7 +174,11 @@ impl<const N: usize> BlurRegionsPipeline<N> {
                 ),
             ),
         );
-        let sampler = render_device.create_sampler(&SamplerDescriptor::default());
+        let sampler = render_device.create_sampler(&SamplerDescriptor {
+            address_mode_u: AddressMode::MirrorRepeat,
+            address_mode_v: AddressMode::MirrorRepeat,
+            ..default()
+        });
 
         Self { layout, sampler }
     }
@@ -267,6 +272,7 @@ impl<const N: usize> SpecializedRenderPipeline for BlurRegionsPipeline<N> {
                     write_mask: ColorWrites::ALL,
                 })],
             }),
+            zero_initialize_workgroup_memory: false,
         }
     }
 }
