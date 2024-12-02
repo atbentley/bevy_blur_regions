@@ -20,42 +20,37 @@ fn setup(mut commands: Commands) {
     // 3D camera
     commands.spawn((
         BlurRegionsCamera::default(),
-        Camera3dBundle {
-            camera: Camera { order: 1, ..default() },
-            transform: Transform::from_xyz(-2.5, 4.5, 9.0).looking_at(Vec3::ZERO, Vec3::Y),
-            ..default()
-        },
+        Camera3d::default(),
+        Camera { order: 1, ..default() },
+        Transform::from_xyz(-2.5, 4.5, 9.0).looking_at(Vec3::ZERO, Vec3::Y),
     ));
 
     // UI camera
-    commands.spawn(Camera2dBundle {
-        camera: Camera { order: 2, ..default() },
-        ..default()
-    });
+    commands.spawn((
+        Camera2d::default(),
+        Camera { order: 2, ..default() }
+        ));
 
     // UI node with blur region
     commands.spawn((
         BlurRegion,
-        NodeBundle {
-            border_color: Color::BLACK.into(),
-            border_radius: BorderRadius::new(Val::ZERO, Val::Percent(5.0), Val::Percent(10.0), Val::Percent(15.0)),
-            style: Style {
-                width: Val::Percent(50.0),
-                height: Val::Percent(50.0),
-                border: UiRect::all(Val::Px(5.0)),
-                ..default()
-            },
+        Node {
+            width: Val::Percent(50.0),
+            height: Val::Percent(50.0),
+            border: UiRect::all(Val::Px(5.0)),
             ..default()
         },
+        BorderColor(Color::BLACK),
+        BorderRadius::new(Val::ZERO, Val::Percent(5.0), Val::Percent(10.0), Val::Percent(15.0)),
     ));
 }
 
-fn move_node(time: Res<Time>, mut nodes: Query<(&mut Style, &mut Visibility)>) {
-    for (mut style, mut visibility) in &mut nodes {
-        style.left = Val::Percent((time.elapsed_seconds().cos() + 1.0) / 2.0 * 50.0);
-        style.top = Val::Percent((time.elapsed_seconds().sin() + 1.0) / 2.0 * 50.0);
+fn move_node(time: Res<Time>, mut nodes: Query<(&mut Node, &mut Visibility)>) {
+    for (mut node, mut visibility) in &mut nodes {
+        node.left = Val::Percent((time.elapsed_secs().cos() + 1.0) / 2.0 * 50.0);
+        node.top = Val::Percent((time.elapsed_secs().sin() + 1.0) / 2.0 * 50.0);
 
-        *visibility = if time.elapsed_seconds() % 2. < 1. {
+        *visibility = if time.elapsed_secs() % 2. < 1. {
             Visibility::Visible
         } else {
             Visibility::Hidden
