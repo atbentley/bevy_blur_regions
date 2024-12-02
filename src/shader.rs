@@ -19,7 +19,7 @@ use bevy::render::render_graph::ViewNodeRunner;
 use bevy::render::render_resource::binding_types::sampler;
 use bevy::render::render_resource::binding_types::texture_2d;
 use bevy::render::render_resource::binding_types::uniform_buffer;
-use bevy::render::render_resource::BindGroupEntries;
+use bevy::render::render_resource::{AddressMode, BindGroupEntries};
 use bevy::render::render_resource::BindGroupLayout;
 use bevy::render::render_resource::BindGroupLayoutEntries;
 use bevy::render::render_resource::CachedRenderPipelineId;
@@ -175,7 +175,11 @@ impl<const N: usize> BlurRegionsPipeline<N> {
                 ),
             ),
         );
-        let sampler = render_device.create_sampler(&SamplerDescriptor::default());
+        let sampler = render_device.create_sampler(&SamplerDescriptor {
+            address_mode_u: AddressMode::MirrorRepeat,
+            address_mode_v: AddressMode::MirrorRepeat,
+            ..default()
+        });
 
         Self { layout, sampler }
     }
